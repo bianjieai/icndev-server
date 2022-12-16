@@ -1,0 +1,86 @@
+[app]
+addr = "0.0.0.0:8000"
+is_product = true
+start_task = true
+log_level = "info"
+explorer_frontend_uri = "http://dev.exp.cschain.tech"
+visualization_frontend_uri = "https://visualization-frontend-uri"
+lcd_uri = "http://10.0.1.116:1317"
+session_expired_second = 3600
+
+[mysql_visualization]
+host = "127.0.0.1"
+port = 3306
+username = "root"
+password = "12345"
+database = "visualization"
+charset = "utf8mb4"
+timezone = "Asia/Shanghai"
+
+#[mysql_visualization]
+#host = "10.0.1.117"
+#port = 30306
+#username = "cschain"
+#password = "cschainpassword"
+#database = "visualization"
+#charset = "utf8mb4"
+#timezone = "Asia/Shanghai"
+
+[mongo]
+url = "mongodb://cschain:cschainpassword@10.0.1.8:30476/?connect=direct&authSource=sup-tech"
+database = "sup-tech"
+
+# [mongo]
+# url = "mongodb://cschain:JPUXGg9mFhY3by@10.0.4.4:30017/?connect=direct&authSource=sup-tech"
+# database = "sup-tech"
+
+#[mongo]
+#url = "mongodb://iris:irispassword@localhost:27017/?connect=direct&authSource=sup-tech"
+#database = "sup-tech"
+
+[mongo_logs]
+url = "mongodb://recorder:recorderpassword@10.0.1.8:30476/?connect=direct&authSource=logs"
+database = "logs"
+
+[mongo_explorer]
+url = "mongodb://cschain:cschainpassword@10.0.1.8:30476/?connect=direct&authSource=explorer-sync"
+database = "explorer-sync"
+
+#[redis]
+#addrs = "127.0.0.1:6379"
+#user = ""
+#password = "12345"
+#mode = "single"
+#db = 0
+
+[redis]
+addrs = "10.0.1.116:6379"
+user = ""
+password = "redisPassword"
+mode = "single"
+db = 4
+
+[es]
+url = "http://10.0.1.30:30000"
+
+[oss]
+endpoint = "10.0.1.30:31429"
+access_key = "minio-otc"
+access_secret = "IM0celF9T/ZzpLJ0"
+bucket = "otcibr/"
+prefix = "global/"
+
+[sso]
+app_id = "cs26DoufnLSOr3OoN2VtmqSq5wGGs"
+sso_uri = "http://sso-srver.sso:8000"
+app_secret = "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAkLumkcf8GmRWaGu9J2W0RH2rt+e1OMz3OlYrzA8VxffLlb3y\nioXW2vfw90Pp4CYNfiRl9q6Le2FvDhl/VLzzYpGQVaMKARhDBRlXrrQUjgvaDKcm\nDx+KVsvnbPjKtIB5insGGPhlyGUb9kyxa9qayhmOgL5+3AUcfwI3BZFGrjTeV512\nnnL3B4DyDMw1KZVtpO5cqPzOYDXt3kOyJef1jkmCSkaOYYgavxZXTSJPt8pT/Sjk\n8iQpPtoLSDT6RrJ39fS4DLcSsi1FHus68+XDnEMnzkAFfsM44Ayh8y5rk5nVhYoL\n2bDPjWzUSmIO7vGIc06BbI6MOUsNGtIPp0SQZwIDAQABAoIBAG/1yXfSVTHxVmp2\nlZ+JbHbjJFgiVSz4WXN2P3EeZkB7XLCcfKgturQuwuf0UFJF/YAMFhhKk7nA+JDW\npopdlIU2h4nHkrCgHRAvt4V85r2va2EIWEewpWpZV9ATcXNKQzsdyey9Erd/h67z\nSvhc5gra1ELBmg8HoTCa/QdAh4WwUcDb04YB52uNEPzC+4/Kvi4FQZ0XS+/UmKoZ\n+MQweXEDEtR5wSbmXamL73Fa1FuuYyERP0UgeoY3Wocu7/LuM0QHZwMkXS7ay4El\n/QNSlB142sJkIcAgcIw0FHJD43NkwxBV/wXIRythWqTqBD52+m06gpmamZM/oZ6B\nINY3i5ECgYEA24dPMNY/+DTL7B37w507OdrYY0kYOjjUb/hMTLWI2G3xJL2oFAUr\noE2En6PBRNXcn4LGrEmGuRwai1Wp1hpYqjXdeNIEoTACNVALWVr8lJ47TV4tdbp/\nhP/HyxWRiBFNk+68rR0jMLemcb/lfQ6EDjKPuolgy4lBH8RhaWs7uF8CgYEAqMc9\nIJKCdXyQOqBbzlnhRkCAgzolw5RAs8JK8VPTK7jpVJQTCjsd92Lz3yxhM1PLHwXC\n1XJ1jtgMv/++8xoQvrdtZzgs5lmqWG1DW5L26UbzxRJXm/XM12/sCzFqGeblJVx7\n5yXUurIKkIqifyPjqL0Sa2NPwDQir52YaILrRPkCgYEAyQuDH7OnA/W+J7BR6JSv\nL83XTB4d3Pw8uYqIvdumxqbxJ/e03RjbGkTDx7udfR/qm/6VWiVAB3jQanh6QIUC\nXGdWO5cC/GdOLmru6ddk5+p9Xt53/ZBdxnzFCZzoGdfW1zrVeijsGGqoORZH4h6Q\nG7x8WpYDmoNJrAEaQQQevjsCgYBs8YZ8gvWg3pG+tgnsjcnC7hnGGv+LWiPVpKF5\nWvFhNI+wX5BWt0glioL+WIg5eGoRkUdtPd+yH7VDLdLU2staP85npTQeUFyLjaO/\n9YJZm8n4OFnCuwvJOF517yScqZTZ4/O6hYnmJMx69nHjfYgTQFAmb0loOH73OtPJ\nClDRCQKBgAMOHWn6W73vkEU/jd+jDO+UK/t4P9uWApHCdFRQsBilyaSy+1datIAp\nqdrS+rsUcBM+Ilw4Id/tMkw1g0nhmw+90kvlxALWaMbNw/7lKj5gQ9CsaEiFF1lQ\n7FmwKOyPsU7de4USAggNT5nwGpIdeMYIaqMPwODu2pD6SqXnxj83\n-----END RSA PRIVATE KEY-----"
+
+[uci]
+service = "/otcibr2/services/uci/apigateway2"
+zk_host = "127.0.0.1:2181"
+username = "configer"
+password = "configerPassword"
+
+[cross_chain_service]
+name = "crx_chain_svc" # dev: crx_chain_svc, pre: UNIFIED-CROSS-CHAIN-SERVICE
+
