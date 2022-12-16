@@ -12,6 +12,14 @@ func Build(data interface{}) vo.BaseResponse {
 	}
 }
 
+func BuildWithMessage(message string, data interface{}) vo.BaseResponse {
+	return vo.BaseResponse{
+		Code:    0,
+		Message: message,
+		Data:    data,
+	}
+}
+
 func BuildWithPage(data interface{}, pageVO vo.PageVO, total int) vo.BaseResponseWithPage {
 	return vo.BaseResponseWithPage{
 		Code:  0,
@@ -36,9 +44,9 @@ func BuildErrCode(errCode int) vo.BaseResponse {
 	}
 }
 
-func BuildUnderMaintenance() vo.BaseResponse {
+func BuildSubscribed(err errors.Error) vo.BaseResponse {
 	return vo.BaseResponse{
-		Code:    1,
-		Message: "the service is under maintenance",
+		Code:    err.Code(),
+		Message: "Subscribed",
 	}
 }
