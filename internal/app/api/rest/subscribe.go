@@ -7,6 +7,7 @@ import (
 	"github.com/bianjieai/icndev-server/internal/app/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 type SubscribeController struct {
@@ -32,8 +33,12 @@ func (ctl *SubscribeController) EmailCreate(c *gin.Context) {
 		return
 	}
 	if err := ctl.SubscribeService.SubscribeEmail(&req); err != nil {
-		c.JSON(http.StatusOK, response.BuildErr(errors.WrapBadRequest(err)))
+		if strings.Contains(err.Error(), "Duplicate") {
+			c.JSON(http.StatusOK, response.BuildSubscribed(errors.Wrap(err)))
+		} else {
+			c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
+		}
 		return
 	}
-	c.JSON(http.StatusOK, response.Build(nil))
+	c.JSON(http.StatusOK, response.BuildWithMessage("Subscription Success", nil))
 }
