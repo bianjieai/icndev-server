@@ -14,6 +14,6 @@ FROM alpine:3.15
 ENV TZ           Asia/Shanghai
 WORKDIR /root/
 COPY --from=builder /go/src/icndev-server /usr/local/bin
-RUN apk add --no-cache tzdata && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk add --no-cache tzdata && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 CMD ["icndev-server", "start"]
