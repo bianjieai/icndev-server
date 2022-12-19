@@ -3,6 +3,7 @@ module github.com/bianjieai/icndev-server
 go 1.18
 
 require (
+	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.3.0
