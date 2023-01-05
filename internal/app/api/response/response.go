@@ -47,6 +47,6 @@ func BuildErrCode(errCode int) vo.BaseResponse {
 func BuildSubscribed(err errors.Error) vo.BaseResponse {
 	return vo.BaseResponse{
 		Code:    err.Code(),
-		Message: "Subscribed",
+		Message: "Thank you. You're already subscribed.",
 	}
 }

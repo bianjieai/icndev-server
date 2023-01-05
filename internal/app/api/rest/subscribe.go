@@ -40,5 +40,5 @@ func (ctl *SubscribeController) EmailCreate(c *gin.Context) {
 		}
 		return
 	}
-	c.JSON(http.StatusOK, response.BuildWithMessage("Subscription Success", nil))
+	c.JSON(http.StatusOK, response.BuildWithMessage("You are now subscribed.", nil))
 }
