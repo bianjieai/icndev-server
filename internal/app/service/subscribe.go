@@ -28,13 +28,10 @@ func (svc *SubscribeService) SubscribeEmail(req *vo.CreateSubscribeEmailReq) err
 }
 
 func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreDTO, int64, error) {
-	offset, limit, useTotal := utils.ParsePage(req.Page, req.Size, req.Total)
-	res, total, err := svc.challengeRepo.FindByLimit(offset, limit, useTotal)
+	offset, limit, _ := utils.ParsePage(req.Page, req.Size, req.Total)
+	res, total, err := svc.challengeRepo.FindByLimit(offset, limit)
 	if err != nil {
 		return nil, 0, err
-	}
-	if total != 0 {
-		return nil, total, nil
 	}
 	var challengeScore dto.ChallengeScoreDTO
 	if len(res) > 0 {
@@ -47,7 +44,7 @@ func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreD
 			scoreRank.FinalScore = v.FinalScore
 			challengeScore.ScoreRank = append(challengeScore.ScoreRank, scoreRank)
 		}
-		return &challengeScore, 0, nil
+		return &challengeScore, total, nil
 	} else {
 		return nil, 0, errors.New("no data in db")
 	}
