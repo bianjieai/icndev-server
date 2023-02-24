@@ -9,10 +9,12 @@ import (
 
 type Repositories struct {
 	SubscribeRepo *repository.SubscribeEmailRepo
+	ChallengeRepo *repository.ChallengeScoreRepo
 }
 
 type CacheRepositories struct {
 	SubscribeCacheRepo *cache.SubscribeEmailCacheRepo
+	ChallengeCacheRepo *cache.ChallengeScoreCacheRepo
 }
 
 type Services struct {

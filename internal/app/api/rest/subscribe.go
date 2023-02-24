@@ -42,3 +42,18 @@ func (ctl *SubscribeController) EmailCreate(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, response.BuildWithMessage("You are now subscribed.", nil))
 }
+
+func (ctl *SubscribeController) ChallengeScore(c *gin.Context) {
+	var req vo.PageVO
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
+		return
+	}
+
+	res, total, err := ctl.SubscribeService.ChallengeScore(req)
+	if err != nil {
+		c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
+		return
+	}
+	c.JSON(http.StatusOK, response.BuildWithPage(res, req, int(total)))
+}
