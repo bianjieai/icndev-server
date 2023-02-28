@@ -22,6 +22,6 @@ func (repo *ChallengeScoreRepo) FindByLimit(offset, limit int) ([]*entity.Challe
 	var total int64
 	var err error
 	tx := repo.db.Table(entity.TableNameChallengeScore)
-	err = tx.Count(&total).Order("`rank`").Offset(offset).Limit(limit).Find(&res).Error
+	err = tx.Count(&total).Order("`rank`, team_name DESC").Offset(offset).Limit(limit).Find(&res).Error
 	return res, total, err
 }
