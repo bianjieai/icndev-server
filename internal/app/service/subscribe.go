@@ -7,6 +7,7 @@ import (
 	"github.com/bianjieai/icndev-server/internal/app/model/vo"
 	"github.com/bianjieai/icndev-server/internal/app/repository/cache"
 	"github.com/bianjieai/icndev-server/utils"
+	"sort"
 	"time"
 )
 
@@ -36,14 +37,17 @@ func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreD
 	var challengeScore dto.ChallengeScoreDTO
 	if len(res) > 0 {
 		challengeScore.UpdateTime = res[0].UpdateTime
+		var scores dto.Scores
 		for _, v := range res {
 			var scoreRank dto.ScoreRank
 			scoreRank.Rank = v.Rank
 			scoreRank.TeamName = v.TeamName
 			scoreRank.TaskCompleted = v.TaskCompleted
 			scoreRank.FinalScore = v.FinalScore
-			challengeScore.ScoreRank = append(challengeScore.ScoreRank, scoreRank)
+			scores = append(scores, scoreRank)
 		}
+		sort.Sort(&scores)
+		challengeScore.ScoreRank = scores
 		return &challengeScore, total, nil
 	} else {
 		return nil, 0, errors.New("no data in db")
