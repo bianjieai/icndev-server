@@ -47,7 +47,11 @@ func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreD
 			scores = append(scores, scoreRank)
 		}
 		sort.Sort(&scores)
-		challengeScore.ScoreRank = scores
+		if offset+limit >= len(res) {
+			challengeScore.ScoreRank = scores[offset:len(res)]
+		} else {
+			challengeScore.ScoreRank = scores[offset : offset+limit]
+		}
 		return &challengeScore, total, nil
 	} else {
 		return nil, 0, errors.New("no data in db")
