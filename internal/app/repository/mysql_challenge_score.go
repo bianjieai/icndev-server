@@ -6,7 +6,7 @@ import (
 )
 
 type IChallengeScoreRepo interface {
-	FindByLimit(offset, limit int) ([]*entity.ChallengeScore, int64, error)
+	FindAll() ([]*entity.ChallengeScore, int64, error)
 }
 
 type ChallengeScoreRepo struct {
@@ -17,7 +17,7 @@ func NewChallengeScoreRepo(db *gorm.DB) *ChallengeScoreRepo {
 	return &ChallengeScoreRepo{db: db}
 }
 
-func (repo *ChallengeScoreRepo) FindByLimit(offset, limit int) ([]*entity.ChallengeScore, int64, error) {
+func (repo *ChallengeScoreRepo) FindAll() ([]*entity.ChallengeScore, int64, error) {
 	var res []*entity.ChallengeScore
 	var total int64
 	var err error

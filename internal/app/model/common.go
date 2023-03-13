@@ -8,13 +8,15 @@ import (
 )
 
 type Repositories struct {
-	SubscribeRepo *repository.SubscribeEmailRepo
-	ChallengeRepo *repository.ChallengeScoreRepo
+	SubscribeRepo     *repository.SubscribeEmailRepo
+	ChallengeRepo     *repository.ChallengeScoreRepo
+	SpecialAwardsRepo *repository.SpecialAwardsRepo
 }
 
 type CacheRepositories struct {
-	SubscribeCacheRepo *cache.SubscribeEmailCacheRepo
-	ChallengeCacheRepo *cache.ChallengeScoreCacheRepo
+	SubscribeCacheRepo     *cache.SubscribeEmailCacheRepo
+	ChallengeCacheRepo     *cache.ChallengeScoreCacheRepo
+	SpecialAwardsCacheRepo *cache.SpecialAwardsCacheRepo
 }
 
 type Services struct {

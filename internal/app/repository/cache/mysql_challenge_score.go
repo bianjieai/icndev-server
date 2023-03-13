@@ -13,6 +13,6 @@ func NewChallengeScoreCacheRepo(dbr *repository.ChallengeScoreRepo) *ChallengeSc
 	return &ChallengeScoreCacheRepo{dbr: dbr}
 }
 
-func (repo *ChallengeScoreCacheRepo) FindByLimit(offset, limit int) ([]*entity.ChallengeScore, int64, error) {
-	return repo.dbr.FindByLimit(offset, limit)
+func (repo *ChallengeScoreCacheRepo) FindAll() ([]*entity.ChallengeScore, int64, error) {
+	return repo.dbr.FindAll()
 }

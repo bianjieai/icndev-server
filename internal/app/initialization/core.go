@@ -11,21 +11,23 @@ import (
 
 func NewRepositories(mysqlIcndev *gorm.DB) *model.Repositories {
 	return &model.Repositories{
-		SubscribeRepo: repository.NewSubscribeEmailRepo(mysqlIcndev),
-		ChallengeRepo: repository.NewChallengeScoreRepo(mysqlIcndev),
+		SubscribeRepo:     repository.NewSubscribeEmailRepo(mysqlIcndev),
+		ChallengeRepo:     repository.NewChallengeScoreRepo(mysqlIcndev),
+		SpecialAwardsRepo: repository.NewSpecialAwardsRepo(mysqlIcndev),
 	}
 }
 
 func NewCacheRepositories(r *model.Repositories) *model.CacheRepositories {
 	return &model.CacheRepositories{
-		SubscribeCacheRepo: cache.NewSubscribeEmailCacheRepo(r.SubscribeRepo),
-		ChallengeCacheRepo: cache.NewChallengeScoreCacheRepo(r.ChallengeRepo),
+		SubscribeCacheRepo:     cache.NewSubscribeEmailCacheRepo(r.SubscribeRepo),
+		ChallengeCacheRepo:     cache.NewChallengeScoreCacheRepo(r.ChallengeRepo),
+		SpecialAwardsCacheRepo: cache.NewSpecialAwardsCacheRepo(r.SpecialAwardsRepo),
 	}
 }
 
 func NewServices(r *model.CacheRepositories) *model.Services {
 	return &model.Services{
-		SubscribeService: service.NewSubscribeService(r.SubscribeCacheRepo, r.ChallengeCacheRepo),
+		SubscribeService: service.NewSubscribeService(r.SubscribeCacheRepo, r.ChallengeCacheRepo, r.SpecialAwardsCacheRepo),
 	}
 }
 
