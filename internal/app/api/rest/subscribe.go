@@ -44,7 +44,7 @@ func (ctl *SubscribeController) EmailCreate(c *gin.Context) {
 }
 
 func (ctl *SubscribeController) ChallengeScore(c *gin.Context) {
-	var req vo.PageVO
+	var req vo.ChallengeScoreReq
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
 		return
@@ -55,5 +55,19 @@ func (ctl *SubscribeController) ChallengeScore(c *gin.Context) {
 		c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
 		return
 	}
-	c.JSON(http.StatusOK, response.BuildWithPage(res, req, int(total)))
+	if res == nil {
+		c.JSON(http.StatusOK, response.BuildErr(errors.WrapDetail(errors.EC40004, "no data find")))
+		return
+	}
+	c.JSON(http.StatusOK, response.BuildWithPage(res, *req.Page, int(total)))
+}
+
+func (ctl *SubscribeController) SpecialAwards(c *gin.Context) {
+	res, err := ctl.SubscribeService.SpecialAwards()
+	if err != nil {
+		c.JSON(http.StatusOK, response.BuildErr(errors.Wrap(err)))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Build(res))
 }

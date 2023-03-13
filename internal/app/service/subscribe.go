@@ -12,12 +12,13 @@ import (
 )
 
 type SubscribeService struct {
-	subscribeRepo *cache.SubscribeEmailCacheRepo
-	challengeRepo *cache.ChallengeScoreCacheRepo
+	subscribeRepo     *cache.SubscribeEmailCacheRepo
+	challengeRepo     *cache.ChallengeScoreCacheRepo
+	specialAwardsRepo *cache.SpecialAwardsCacheRepo
 }
 
-func NewSubscribeService(subscribeRepo *cache.SubscribeEmailCacheRepo, challengeRepo *cache.ChallengeScoreCacheRepo) *SubscribeService {
-	return &SubscribeService{subscribeRepo: subscribeRepo, challengeRepo: challengeRepo}
+func NewSubscribeService(subscribeRepo *cache.SubscribeEmailCacheRepo, challengeRepo *cache.ChallengeScoreCacheRepo, specialAwardsRepo *cache.SpecialAwardsCacheRepo) *SubscribeService {
+	return &SubscribeService{subscribeRepo: subscribeRepo, challengeRepo: challengeRepo, specialAwardsRepo: specialAwardsRepo}
 }
 
 func (svc *SubscribeService) SubscribeEmail(req *vo.CreateSubscribeEmailReq) error {
@@ -28,9 +29,14 @@ func (svc *SubscribeService) SubscribeEmail(req *vo.CreateSubscribeEmailReq) err
 	return err
 }
 
-func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreDTO, int64, error) {
-	offset, limit, _ := utils.ParsePage(req.Page, req.Size, req.Total)
-	res, total, err := svc.challengeRepo.FindByLimit(offset, limit)
+func (svc *SubscribeService) ChallengeScore(req vo.ChallengeScoreReq) (*dto.ChallengeScoreDTO, int64, error) {
+	var (
+		offset, limit int
+	)
+	if req.TeamName == "" {
+		offset, limit, _ = utils.ParsePage(req.Page.Page, req.Page.Size, req.Page.Total)
+	}
+	res, total, err := svc.challengeRepo.FindAll()
 	if err != nil {
 		return nil, 0, err
 	}
@@ -47,13 +53,62 @@ func (svc *SubscribeService) ChallengeScore(req vo.PageVO) (*dto.ChallengeScoreD
 			scores = append(scores, scoreRank)
 		}
 		sort.Sort(&scores)
-		if offset+limit >= len(res) {
-			challengeScore.ScoreRank = scores[offset:len(res)]
+
+		if req.TeamName != "" {
+			index := -1
+			for i, v := range scores {
+				if v.TeamName == req.TeamName {
+					index = i
+					break
+				}
+			}
+			if index == -1 {
+				return nil, 0, nil
+			}
+
+			page := index / req.Page.Size
+			req.Page.Page = page + 1
+			offset, limit, _ = utils.ParsePage(page+1, req.Page.Size, true)
+			if offset+limit >= len(res) {
+				challengeScore.ScoreRank = scores[offset:len(res)]
+			} else {
+				challengeScore.ScoreRank = scores[offset : offset+limit]
+			}
+			return &challengeScore, total, nil
 		} else {
-			challengeScore.ScoreRank = scores[offset : offset+limit]
+			if offset+limit >= len(res) {
+				challengeScore.ScoreRank = scores[offset:len(res)]
+			} else {
+				challengeScore.ScoreRank = scores[offset : offset+limit]
+			}
+			return &challengeScore, total, nil
 		}
-		return &challengeScore, total, nil
 	} else {
 		return nil, 0, errors.New("no data in db")
+	}
+}
+
+func (svc *SubscribeService) SpecialAwards() (*dto.ChallengeScoreDTO, error) {
+	res, _, err := svc.specialAwardsRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+	var challengeScore dto.ChallengeScoreDTO
+	if len(res) > 0 {
+		challengeScore.UpdateTime = res[0].UpdateTime
+		var scores dto.Scores
+		for _, v := range res {
+			var scoreRank dto.ScoreRank
+			scoreRank.Rank = v.Rank
+			scoreRank.TeamName = v.TeamName
+			scoreRank.TaskCompleted = v.TaskCompleted
+			scoreRank.FinalScore = v.FinalScore
+			scores = append(scores, scoreRank)
+		}
+		sort.Sort(&scores)
+		challengeScore.ScoreRank = scores
+		return &challengeScore, nil
+	} else {
+		return nil, errors.New("no data in db")
 	}
 }
