@@ -10,7 +10,6 @@ BINARY_UNIX=$(BINARY_NAME)-unix
 export GO111MODULE = on
 export GOSUMDB=off
 export GIT_TERMINAL_PROMPT=1
-export GOPROXY=
 
 all: get_vendor build
 
