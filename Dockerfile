@@ -2,7 +2,7 @@ FROM golang:1.16.15-alpine3.15 as builder
 # Set up dependencies
 ENV PACKAGES make git libc-dev bash gcc
 ENV GO111MODULE  on
-ARG GOPROXY=http://192.168.0.60:8081/repository/go-bianjie/,http://nexus.bianjie.ai/repository/golang-group,https://goproxy.cn,direct
+ARG GOPROXY=https://goproxy.cn,direct
 
 COPY  . $GOPATH/src
 WORKDIR $GOPATH/src
