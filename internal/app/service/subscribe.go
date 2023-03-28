@@ -29,6 +29,25 @@ func (svc *SubscribeService) SubscribeEmail(req *vo.CreateSubscribeEmailReq) err
 	return err
 }
 
+type ScoreNum struct {
+	Score int
+	Num   int
+}
+
+type ScoreNums []ScoreNum
+
+func (p ScoreNums) Len() int {
+	return len(p)
+}
+
+func (p ScoreNums) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
+}
+
+func (p ScoreNums) Less(i, j int) bool {
+	return p[i].Score > p[j].Score
+}
+
 func (svc *SubscribeService) ChallengeScore(req vo.ChallengeScoreReq) (*dto.ChallengeScoreDTO, int64, error) {
 	var (
 		offset, limit int
@@ -42,11 +61,32 @@ func (svc *SubscribeService) ChallengeScore(req vo.ChallengeScoreReq) (*dto.Chal
 	}
 	var challengeScore dto.ChallengeScoreDTO
 	if len(res) > 0 {
+		var scoreNums ScoreNums
+		sMap := make(map[int]int)
+		for _, v := range res {
+			sMap[v.FinalScore] += 1
+		}
+		for k, v := range sMap {
+			var scoreNum ScoreNum
+			scoreNum.Score = k
+			scoreNum.Num = v
+			scoreNums = append(scoreNums, scoreNum)
+		}
+		sort.Sort(scoreNums)
+
 		challengeScore.UpdateTime = res[0].UpdateTime
 		var scores dto.Scores
 		for _, v := range res {
 			var scoreRank dto.ScoreRank
-			scoreRank.Rank = v.Rank
+			rank := 1
+			for _, sn := range scoreNums {
+				if v.FinalScore == sn.Score {
+					scoreRank.Rank = rank
+					break
+				}
+				rank += sn.Num
+			}
+			//scoreRank.Rank = v.Rank
 			scoreRank.TeamName = v.TeamName
 			scoreRank.TaskCompleted = v.TaskCompleted
 			scoreRank.FinalScore = v.FinalScore
