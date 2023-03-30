@@ -135,11 +135,32 @@ func (svc *SubscribeService) SpecialAwards() (*dto.ChallengeScoreDTO, error) {
 	}
 	var challengeScore dto.ChallengeScoreDTO
 	if len(res) > 0 {
+		var scoreNums ScoreNums
+		sMap := make(map[int]int)
+		for _, v := range res {
+			sMap[v.FinalScore] += 1
+		}
+		for k, v := range sMap {
+			var scoreNum ScoreNum
+			scoreNum.Score = k
+			scoreNum.Num = v
+			scoreNums = append(scoreNums, scoreNum)
+		}
+		sort.Sort(scoreNums)
+
 		challengeScore.UpdateTime = res[0].UpdateTime
 		var scores dto.Scores
 		for _, v := range res {
 			var scoreRank dto.ScoreRank
-			scoreRank.Rank = v.Rank
+			rank := 1
+			for _, sn := range scoreNums {
+				if v.FinalScore == sn.Score {
+					scoreRank.Rank = rank
+					break
+				}
+				rank += sn.Num
+			}
+			//scoreRank.Rank = v.Rank
 			scoreRank.TeamName = v.TeamName
 			scoreRank.TaskCompleted = v.TaskCompleted
 			scoreRank.FinalScore = v.FinalScore
